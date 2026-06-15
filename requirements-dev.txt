@@ -8,7 +8,7 @@ nbconvert>=7.8
 pytest>=8.0
 pytest-cov>=4.1  # optional
 
-# Code quality
+# Code quality # linting things, how many blank lines and so on
 black>=24.0
 ruff>=0.3
 

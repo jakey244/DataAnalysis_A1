@@ -2,6 +2,9 @@
 build-backend = "setuptools.build_meta"
 requires = ["setuptools>=68", "wheel"]
 
+[project2]
+name = "spectra_analysis"
+
 [project]
 name = "amoc-analysis"
 version = "0.1.0"
@@ -38,7 +41,7 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["amoc_analysis"]
+include = ["amoc_analysis", "spectra_filtering"]
 
 [tool.black]
 line-length = 88
