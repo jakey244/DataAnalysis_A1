@@ -4,8 +4,8 @@ from typing import Callable, List, Union
 import pandas as pd
 import xarray as xr
 
-from amoc_analysis import utilities
-from amoc_analysis.utilities import apply_defaults
+from amoc_analysis import analysis
+from amoc_analysis.analysis import apply_defaults
 
 # Default list of RAPID data files
 RAPID_DEFAULT_SOURCE = "https://rapid.ac.uk/sites/default/files/rapid_data/"
@@ -73,7 +73,7 @@ def read_rapid(
     if isinstance(file_list, str):
         file_list = [file_list]
 
-    local_data_dir = Path(data_dir) if data_dir else utilities.get_default_data_dir()
+    local_data_dir = Path(data_dir) if data_dir else analysis.get_default_data_dir()
     local_data_dir.mkdir(parents=True, exist_ok=True)
 
     datasets = []
@@ -83,10 +83,10 @@ def read_rapid(
             continue
 
         download_url = (
-            f"{source.rstrip('/')}/{file}" if utilities._is_valid_url(source) else None
+            f"{source.rstrip('/')}/{file}" if analysis._is_valid_url(source) else None
         )
 
-        file_path = utilities.resolve_file_path(
+        file_path = analysis.resolve_file_path(
             file_name=file,
             source=source,
             download_url=download_url,
@@ -100,7 +100,7 @@ def read_rapid(
             raise FileNotFoundError(f"Failed to open NetCDF file: {file_path}: {e}")
 
         file_metadata = RAPID_FILE_METADATA.get(file, {})
-        utilities.safe_update_attrs(
+        analysis.safe_update_attrs(
             ds,
             {
                 "source_file": file,
