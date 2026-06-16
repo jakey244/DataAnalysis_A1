@@ -106,6 +106,7 @@ def welch_psd(
     segment_length: int,
     overlap: float = 0.5,
     window: str = "hann",
+    mode: str = "zero-padding" # or "truncate"
 ) -> tuple[np.ndarray, np.ndarray]:
     """Welch (overlapped-segment-averaged) PSD estimate.
 
@@ -146,32 +147,38 @@ def welch_psd(
     step = int(segment_length * (1-overlap))
 
     n_segments = int((length_of_dataset-segment_length) // step) + 1
-    
+    zero_padding = False
+    if segment_length + step * n_segments  > length_of_dataset: # dealing with inconsistent segments and dataset, should be improved in the future
+        if mode == "truncate":
+            n_segments = n_segments - 1 # just disregard the 
+            print(f"Used truncation. Could not use the last {segment_length} values")
+        if mode == "zero-padding": 
+            zero_padding = True
+            print(f"Used zero-padding for last segment. Padded {segment_length + step * n_segments  - length_of_dataset} zeros.")
 
     freq = None
     if length_of_dataset % 2 == 0:
-        psd_sum = np.empty(int(segment_length) // 2 + 1)
+        psd_sum = np.zeros(int(segment_length) // 2 + 1) # from this we learn that you have to use np.zeros instead of np.empty (which would be the cleaner way)
+                                                         # but requires initializing otherwise i get stupid NaN issues in my FFT, i though automatic handling >:( 
     elif length_of_dataset % 2 == 1:
-        psd_sum = np.empty((int(segment_length) +1 ) // 2)
+        psd_sum = np.zeros((int(segment_length) +1 ) // 2)
     else:
         raise ("Invalid Dataset")
-
     for i in range(n_segments):
         start = int(i*step)
         end = int(start + segment_length)
         segment = x[start:end]
-        
-        if len(segment) < segment_length:
+        if zero_padding and len(segment)<segment_length:
             segment = np.pad(segment, (0, segment_length - len(segment)), mode='constant')
-
         segment_frequency, segment_psd = raw_periodogram(segment, dt_days, window = window)
         freq = segment_frequency
-
         psd_sum = psd_sum + segment_psd
-
-
     psd = psd_sum / n_segments
-    # noverlap = int(segment_length * overlap)
+
+    if not np.isfinite(psd).all():
+            raise "You have NaNs in your Fourier Transform >:("
+
+    # noverlap = int(segment_length * overlap) # the built in scipy function did not produce valid results for me, might be worth looking into
     # freq, psd = signal.welch(
     #     x,
     #     dt_days,
