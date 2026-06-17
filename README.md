@@ -28,20 +28,30 @@ In the figures directory is a file MHT_histogram.pdf which shows a histogram of 
 
 The figure lowpassed_timeseries.pdf shows the timeseries as well as a filtered timeseries with a 90-day lowpass filter.
 The 90-day window was chosen to preserve the seasonal cycle but remove all high frequency components.
+It can be observed that the minimal heat transport (or even negative) mostly occurs in northern hemispheric winter, but not for every year. This points to the fact that there is more variability involved.
 
 ## PART B
 
 The figure mocha_PSD_MHT.pdf shows the power spectral density of the time series calculated for the original MOCHA data and the lowpass-filtered data using Welch's method.
-The important frequencies are the Nyquist frequency, the smallest resolved frequency. 
-However, the original MOCHA data has already been fitered using a 10-day-lowpass. 
-This leads to the spectral densisty dropping sharply around the 0.1 cpd frequency. 
+The figure shows the Nyquist frequency, the smallest resolved frequency, 1 cpd. 
+However, the original MOCHA data has already been fitered using a 10-day-lowpass. This leads to the spectral densisty dropping sharply around the 0.1 cpd frequency. 
 The figure furthermore includes a Chi^2 confidence interval between the 0.025 and 0.975 percentiles for both the filtered and original spectra.
 The degrees of freedom for the chosen segments (see below) are 20.
+
+Both spectra show a peak at the 1 year period, corresponding to the yearly cycle. Furthermore there is a peak at 1/(6 month). This matches the observations from the timeseries plot. 
+All higher frequency signals are attenuated in the filtered spectrum. Even though it seems to me that a lot of higher frequency variability is still visible, for example there is a peak at around 50 cpd which (even though attenuated by an order of magnitudecompared to the original dataset) is easily identifiable as a peak.
+However in that sense, the filter still passes what I am interested in (yearly cycle as well as seasonal variability) and suppresses all higher frequency signals.
+
+The spectra are overall red, excluding the very low frequency signals which appear blue and the frequencies 1/6month to 1/month which appear to be white. Especially the very low frequency signals (periods of 1 year and longer) should be disregarded because the frequency sampling for those periods is very coarse. 
+
+Figure mocha_PSD_MHT_compared_to_boxcar.pdf shows the filtered spectrum as well as the same spectrum but calculated with a simple boxcar window instead of the Hann window used before. It is clearly visible that the spectra look similar, preserving the 1/year and 1/(6 month) peaks but the higher frequency variability attenuated by the filter is not suppressed as much when using the boxcar.
 
 For Welch's method, the function was built from the Periodogram and then averaging segments. The Periodogram handles the detrending for each segment using a linear function.The chosen segment length was 3 years with a Hann filter applied and 50% overlap between the segments. In the case that the segment choice did not match up with the length of the dataset, two methods were built in the Welch function. 
 Either padding the last incomplete segments with zeroes or truncating the dataset such that it matches the segment choice. For the figures, the zero-padding was used.
 
 For the Periodogram function, the integral over the spectrum is equal to the variance up to an error of 0.43%.
+
+
 
 
 ## ABOUT THE TESTS
