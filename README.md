@@ -25,16 +25,24 @@ Range: 3.16 PW
 
 In the figures directory is a file MHT_histogram.pdf which shows a histogram of the distribution.
 
-The figure 180day_lowpass.pdf shows the timeseries as well as a filtered timeseries with a 180-day lowpass filter.
+The figure lowpassed_timeseries.pdf shows the timeseries as well as a filtered timeseries with a 90-day lowpass filter.
+The 90-day window was chosen to preserve the seasonal cycle but remove all high frequency components.
 
 ## PART B
 
 The figure mocha_PSD_MHT.pdf shows the power spectral density of the time series calculated for the original MOCHA data and the lowpass-filtered data using Welch's method.
-The important frequencies are the Nyquist frequency, the smallest resolved frequency. However, the original MOCHA data has already been fitered using a 10-day-lowpass. 
-This leads to the spectral densisty dropping sharply around the 0.1 cpd frequency.
+The important frequencies are the Nyquist frequency, the smallest resolved frequency. 
+However, the original MOCHA data has already been fitered using a 10-day-lowpass. 
+This leads to the spectral densisty dropping sharply around the 0.1 cpd frequency. 
+The figure furthermore includes a Chi^2 confidence interval between the 0.025 and 0.975 percentiles for both the filtered and original spectra.
+The degrees of freedom for the chosen segments (see below) are 20.
 
-Comparing the two spectra, ...
+For Welch's method, the function was built from the Periodogram and then averaging segments. The Periodogram handles the detrending for each segment using a linear function.The chosen segment length was 3 years with a Hann filter applied and 50% overlap between the segments. In the case that the segment choice did not match up with the length of the dataset, two methods were built in the Welch function. 
+Either padding the last incomplete segments with zeroes or truncating the dataset such that it matches the segment choice. For the figures, the zero-padding was used.
+
+For the Periodogram function, the integral over the spectrum is equal to the variance up to an error of 0.43%.
 
 
 ## ABOUT THE TESTS
+
 Not all the tests that are included in the template-assignment pass but the required ones (Parseval satisfied and correct mean calculation) pass.

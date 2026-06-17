@@ -188,7 +188,7 @@ def welch_psd(
     #     detrend = "constant"
     # )
 
-    return freq, psd
+    return freq, psd, n_segments
 
 def parseval_ratio(x: np.ndarray, freq: np.ndarray, psd: np.ndarray) -> float:
     """Ratio of integrated PSD to series variance — a Parseval sanity check.
