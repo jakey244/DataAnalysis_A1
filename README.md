@@ -1,6 +1,7 @@
 # Assigment 1 write up
 
-Jakob Domenig, Data Analysis in Physical Oceanography, Summer 2026
+Jakob Domenig, Data Analysis in Physical Oceanography, Summer 2026.
+
 The figures can be found in the directory /figures/
 
 ## The MOCHA dataset 
