@@ -2,6 +2,8 @@
 
 Jakob Domenig, Data Analysis in Physical Oceanography, Summer 2026.
 
+Github repository https://github.com/jakey244/DataAnalysis_A1
+
 The figures can be found in the directory /figures/
 
 ## The MOCHA dataset 
