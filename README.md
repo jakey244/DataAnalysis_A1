@@ -1,64 +1,163 @@
-# Assigment 1 write up
+# AMOC Analysis Assignment
 
-Jakob Domenig, Data Analysis in Physical Oceanography, Summer 2026.
+> 📊 Data analysis for physical oceanography - analyzing AMOC transport data using Python
 
-The figures can be found in the directory /figures/
+This assignment provides a framework for analyzing Atlantic Meridional Overturning Circulation (AMOC) transport data from the RAPID-MOCHA array at 26°N.
 
-## The MOCHA dataset 
+## 🚀 What's Included
 
-The time series that is the focus of this assignment ist the Meridional Heat Transport in PW from the MOCHA dataset. 
-The Mocha dataset contains data of the meridional heat transport at 26.5 °N (positive is northward) from April 2004 to December 2020.
-I chose the whole time series as this should produce the most accurate spectrum.
+- ✅ Python package for AMOC analysis: `amoc_analysis/*.py`
+- 📓 Jupyter notebook demo: `notebooks/demo.ipynb`
+- 🔍 Tests with `pytest` in `tests/`
+- 🎨 Code formatting with `black` and `ruff`
+- 📦 Package configuration via `pyproject.toml`
 
-In my first uploaded figure I used the Meridional Overturning Circulation data from MOCHA, which I was not sure was the same as the forbidden one (from RAPID as well 26.5 °N)
-and so I chose a different variable. 
+---
 
-## Series characterization
+## Project Structure
 
-The record length is 12-hourly data from April 2004 to December 2020 which results in a time series of 12202 data points.
-The data appears to be already gap-filled, the documentation states "missing: 0.0%". The dataset was furthermore convolved with a 10-day lowpass filter.
+```
+amoc-analysis/
+├── notebooks/                  # Jupyter notebooks for analysis
+├── amoc_analysis/             # Main Python package
+│   ├── data.py                # Data loading functions
+│   ├── analysis.py            # Analysis tools and utilities
+│   └── plotting.py            # Visualization functions
+├── tests/                     # Test suite
+│   ├── test_data.py           # Tests for data loading
+│   ├── test_analysis.py       # Tests for analysis functions
+│   └── test_plotting.py       # Tests for plotting functions
+├── data/                      # Data files (downloaded automatically)
+├── pyproject.toml             # Package configuration
+├── requirements.txt           # Core dependencies
+├── requirements-dev.txt       # Development dependencies
+├── GETTING_STARTED.md         # Step-by-step guide for beginners
+└── INSTRUCTIONS.md            # Detailed project structure explanation
+```
 
-## PART A
+## Assignment Goals
 
-Mean: 1.19 PW 
-Standard deviation: 0.38 PW (ddof = 0, used because I used the whole dataset to calculate the standard deviation)
-Range: 3.16 PW
+- 📊 **Load and explore AMOC transport data** from the RAPID array
+- 🔍 **Analyze temporal variability** in the meridional overturning circulation
+- 📈 **Create visualizations** to understand AMOC behavior
+- 🧪 **Apply scientific Python tools** including xarray, pandas, and matplotlib
+- 📝 **Document your analysis** using Jupyter notebooks
 
-In the figures directory is a file MHT_histogram.pdf which shows a histogram of the distribution.
+---
 
-The figure lowpassed_timeseries.pdf shows the timeseries as well as a filtered timeseries with a 90-day lowpass filter.
-The 90-day window was chosen to preserve the seasonal cycle but remove all high frequency components.
-It can be observed that the minimal heat transport (or even negative) mostly occurs in northern hemispheric winter, but not for every year. This points to the fact that there is more variability involved.
+## 🔧 Getting Started
 
-## PART B
+> 💡 **New to Python projects?** Check out [GETTING_STARTED.md](GETTING_STARTED.md) for a beginner-friendly progression from simple to advanced.
 
-The figure mocha_PSD_MHT.pdf shows the power spectral density of the time series calculated for the original MOCHA data and the lowpass-filtered data using Welch's method.
-The figure shows the Nyquist frequency, the smallest resolved frequency, 1 cpd. 
-However, the original MOCHA data has already been fitered using a 10-day-lowpass. This leads to the spectral densisty dropping sharply around the 0.1 cpd frequency. 
-The figure furthermore includes a Chi^2 confidence interval between the 0.025 and 0.975 percentiles for both the filtered and original spectra.
-The degrees of freedom for the chosen segments (see below) are 20.
+1. **Install the package in development mode:**
 
-Both spectra show a peak at the 1 year period, corresponding to the yearly cycle. Furthermore there is a peak at 1/(6 month). This matches the observations from the timeseries plot. 
-All higher frequency signals are attenuated in the filtered spectrum. Even though it seems to me that a lot of higher frequency variability is still visible, for example there is a peak at around 50 cpd which (even though attenuated by an order of magnitudecompared to the original dataset) is easily identifiable as a peak.
-However in that sense, the filter still passes what I am interested in (yearly cycle as well as seasonal variability) and suppresses all higher frequency signals.
+```bash
+# Clone the repository (or download from your course platform)
 
-The spectra are overall red, excluding the very low frequency signals which appear blue and the frequencies 1/6month to 1/month which appear to be white. Especially the very low frequency signals (periods of 1 year and longer) should be disregarded because the frequency sampling for those periods is very coarse. 
+# Install dependencies and the package
+pip install -e ".[dev]"
+```
 
-Figure mocha_PSD_MHT_compared_to_boxcar.pdf shows the filtered spectrum as well as the same spectrum but calculated with a simple boxcar window instead of the Hann window used before. It is clearly visible that the spectra look similar, preserving the 1/year and 1/(6 month) peaks but the higher frequency variability attenuated by the filter is not suppressed as much when using the boxcar.
+2. **Start Jupyter Lab:**
 
-For Welch's method, the function was built from the Periodogram and then averaging segments. The Periodogram handles the detrending for each segment using a linear function.The chosen segment length was 3 years with a Hann filter applied and 50% overlap between the segments. In the case that the segment choice did not match up with the length of the dataset, two methods were built in the Welch function. 
-Either padding the last incomplete segments with zeroes or truncating the dataset such that it matches the segment choice. For the figures, the zero-padding was used.
+```bash
+jupyter lab
+```
 
-For the Periodogram function, the integral over the spectrum is equal to the variance up to an error of 0.43%.
+3. **Open the demo notebook:**
+   - Navigate to `notebooks/demo.ipynb`
+   - Run the cells to see example analysis
 
+4. **Run tests to verify installation:**
 
+```bash
+pytest
+```
 
+---
 
-## ABOUT THE TESTS
+## 📊 Data
 
-Not all the tests that are included in the template-assignment pass but the required ones (Parseval satisfied and correct mean calculation) pass.
+The assignment uses transport data from the RAPID-MOCHA array at 26°N. Data will be automatically downloaded when you run the analysis functions. The main dataset includes:
 
+- **Time series**: 2004-present
+- **Variables**: Meridional overturning streamfunction, heat transport, volume transport
+- **Resolution**: 12-hourly and daily values
+- **Units**: Sverdrups (Sv) for volume transport, Petawatts (PW) for heat transport
 
-## FURTHER INFORMATION
+---
 
-The plots were created in the two notebooks spectrum.ipynb and timeseries.ipynb, roughly corresponding to parts B and A of the assignment respectively.
+## 🎯 Assignment Tasks
+
+Work through the following analysis tasks in your notebook:
+
+1. **Data Exploration**: Load the RAPID dataset and examine its structure
+2. **Time Series Analysis**: Plot and analyze AMOC variability over time
+3. **Statistical Analysis**: Calculate means, trends, and seasonal cycles
+4. **Visualization**: Create publication-quality plots of your results
+5. **Interpretation**: Discuss the oceanographic significance of your findings
+
+---
+
+## 🛠️ Key Functions
+
+The `amoc_analysis` package provides several useful functions:
+
+```python
+from amoc_analysis import data, plotting, analysis
+
+# Load sample AMOC data
+ds = data.load_sample_dataset("rapid")
+
+# Create visualizations
+plotting.plot_monthly_transport(ds)
+
+# Convert units
+transport_sv = analysis.convert_units_var(transport_m3s, "m^3/s", "Sv")
+```
+
+You also have access to the **amocatlas** package for additional AMOC tools and datasets:
+
+```python
+import amocatlas
+# Explore additional AMOC datasets and analysis tools
+```
+
+---
+
+## 📝 Code Quality
+
+Use the provided tools to maintain clean code:
+
+```bash
+# Format code
+black amoc_analysis/ tests/
+
+# Check code style  
+ruff check amoc_analysis/ tests/
+
+# Run tests
+pytest
+```
+
+---
+
+## 📚 Useful Resources
+
+- [RAPID-MOCHA Array](https://rapid.ac.uk/rapidmoc)
+- [Xarray Documentation](https://xarray.pydata.org/)
+- [Matplotlib Gallery](https://matplotlib.org/stable/gallery/)
+- [Physical Oceanography Concepts](https://www.whoi.edu/know-your-ocean/)
+
+---
+
+## 🤝 Getting Help
+
+If you encounter issues:
+
+1. Check that all dependencies are installed correctly
+2. Verify your Python environment is activated
+3. Review the example notebook for guidance
+4. Ask questions during office hours or class
+
+Good luck with your analysis! 🌊
