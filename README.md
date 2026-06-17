@@ -57,3 +57,8 @@ For the Periodogram function, the integral over the spectrum is equal to the var
 ## ABOUT THE TESTS
 
 Not all the tests that are included in the template-assignment pass but the required ones (Parseval satisfied and correct mean calculation) pass.
+
+
+## FURTHER INFORMATION
+
+The plots were created in the two notebooks spectrum.ipynb and timeseries.ipynb, roughly corresponding to parts B and A of the assignment respectively.
